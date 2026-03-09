@@ -1,6 +1,6 @@
-import { createApp } from 'vue'
-import './styles/style.css'
-import App from './App.vue'
+import { createApp } from 'vue';
+import './styles/style.css';
+import App from './App.vue';
 import router from './router/index.js';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
