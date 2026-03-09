@@ -4,6 +4,8 @@ import AcerCa from '../components/AcerCa.vue';
 import EmpLeados from '../components/EmpLeados.vue';
 import EstaDisticas from '../components/EstaDisticas.vue';
 import TaReas from '../components/TaReas.vue';
+import AvisoLegal from '../components/AvisoLegal.vue';
+import PoliticaPrivacidad from '../components/PoliticaPrivacidad.vue';
 
 const routes = [
     {
@@ -26,6 +28,14 @@ const routes = [
         path: '/about',
         name: 'AcerCa',
         component: AcerCa
+    }, {
+        path: '/avisolegal',
+        name: 'AvisoLegal',
+        component: AvisoLegal
+    }, {
+        path: '/politicadeprivacidad',
+        name: 'PoliticaPrivacidad',
+        component: PoliticaPrivacidad
     }
 ]
 
