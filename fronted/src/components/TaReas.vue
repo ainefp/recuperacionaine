@@ -18,7 +18,7 @@
           </div>
           <div class="card-body">
             <form @submit.prevent="addTarea" class="row g-3">
-              <!-- ID Field (Hidden if empty) -->
+              <!-- ID -->
               <div class="col-12" v-if="nuevaTarea.id">
                 <label for="id" class="form-label fw-semibold">ID:</label>
                 <input
@@ -30,74 +30,120 @@
                 />
               </div>
 
-              <!-- Apellidos Field -->
+              <!-- Fecha -->
               <div class="col-12">
-                <label for="apellidos" class="form-label">Apellidos:</label>
+                <label for="fecha" class="form-label">Fecha:</label>
                 <input
-                  type="text"
-                  id="apellidos"
-                  v-model="nuevaTarea.apellidos"
-                  @blur="capitalizarTexto('apellidos')"
+                  type="date"
+                  id="fecha"
+                  v-model="nuevaTarea.fecha"
                   class="form-control"
-                  placeholder="Ej: García López"
                   required
                 />
               </div>
 
-              <!-- Nombre Field -->
+              <!-- Titulo -->
               <div class="col-12">
-                <label for="nombre" class="form-label">Nombre:</label>
+                <label for="titulo" class="form-label">Título:</label>
                 <input
                   type="text"
-                  id="nombre"
-                  v-model="nuevaTarea.nombre"
-                  @blur="capitalizarTexto('nombre')"
+                  id="titulo"
+                  v-model="nuevaTarea.titulo"
                   class="form-control"
-                  placeholder="Ej: Juan"
+                  placeholder="Título de la tarea"
                   required
                 />
               </div>
 
-              <!-- Email Field -->
+              <!-- Descripción -->
               <div class="col-12">
-                <label for="email" class="form-label">Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  v-model="nuevaTarea.email"
+                <label for="descripcion" class="form-label">Descripción:</label>
+                <textarea
+                  id="descripcion"
+                  v-model="nuevaTarea.descripcion"
+                  @blur="capitalizarTexto('descripcion')"
                   class="form-control"
-                  placeholder="correo@empresa.com"
-                  required
+                  placeholder="Breve descripción"
                 />
               </div>
 
-              <!-- Móvil Field -->
+              <!-- Estado -->
               <div class="col-12">
-                <label for="movil" class="form-label">Móvil:</label>
-                <input
-                  type="text"
-                  id="movil"
-                  v-model="nuevaTarea.movil"
-                  class="form-control"
-                  placeholder="612345678"
-                />
-              </div>
-
-              <!-- Puesto Dropdown -->
-              <div class="col-12">
-                <label for="puesto" class="form-label">Puesto:</label>
+                <label for="estado" class="form-label">Estado:</label>
                 <select
-                  id="puesto"
-                  v-model="nuevaTarea.puesto"
+                  id="estado"
+                  v-model="nuevaTarea.estado"
                   class="form-select"
                   required
                 >
-                  <option disabled value="">-- Seleccione puesto --</option>
-                  <option value="RRHH">RRHH</option>
-                  <option value="Contabilidad">Contabilidad</option>
-                  <option value="Almacén">Almacén</option>
-                  <option value="Ventas">Ventas</option>
+                  <option disabled value="">-- Seleccione el estado --</option>
+                  <option value="pendiente">Pendiente</option>
+                  <option value="en_proceso">En proceso</option>
+                  <option value="finalizada">Finalizada</option>
                 </select>
+              </div>
+
+              <!-- Prioridad -->
+              <div class="col-12">
+                <label class="form-label">Prioridad:</label>
+                <div class="d-flex gap-3">
+                  <div class="form-check">
+                    <input 
+                      type="radio" 
+                      id="baja" 
+                      value="baja" 
+                      v-model="nuevaTarea.prioridad" 
+                      class="form-check-input"
+                    />
+                    <label class="form-check-label" for="baja">
+                      Baja
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input 
+                      type="radio" 
+                      id="media" 
+                      value="media" 
+                      v-model="nuevaTarea.prioridad" 
+                      class="form-check-input"
+                    />
+                    <label class="form-check-label" for="media">
+                      Media
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input 
+                      type="radio" 
+                      id="alta" 
+                      value="alta" 
+                      v-model="nuevaTarea.prioridad" 
+                      class="form-check-input"
+                    />
+                    <label class="form-check-label" for="alta">
+                      Alta
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Empleado -->
+              <div class="col-12">
+                <label class="form-label">Empleado:</label>
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Seleccione un empleado"
+                    :value="getNombreEmpleado(nuevaTarea.empleadoId) || ''"
+                    disabled
+                  />
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-primary"
+                  >
+                    <i class="bi bi-search"></i> Buscar
+                  </button>
+                </div>
               </div>
 
               <!-- Buttons -->
@@ -131,21 +177,30 @@
               <table class="table table-sm table-hover mb-0">
                 <thead class="table-light">
                   <tr>
-                    <th class="fw-semibold">Apellidos</th>
-                    <th class="fw-semibold">Nombre</th>
-                    <th class="fw-semibold">Email</th>
-                    <th class="fw-semibold">Móvil</th>
-                    <th class="fw-semibold">Puesto</th>
+                    <th class="fw-semibold">Fecha</th>
+                    <th class="fw-semibold">Título</th>
+                    <th class="fw-semibold">Descripción</th>
+                    <th class="fw-semibold">Estado</th>
+                    <th class="fw-semibold">Prioridad</th>
+                    <th class="fw-semibold">Empleado</th>
                     <th class="text-center fw-semibold">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="tarea in getTarea()" :key="tarea.id">
-                    <td class="align-middle">{{ tarea.apellidos }}</td>
-                    <td class="align-middle">{{ tarea.nombre }}</td>
-                    <td class="align-middle">{{ tarea.email }}</td>
-                    <td class="align-middle">{{ tarea.movil }}</td>
-                    <td class="align-middle">{{ tarea.puesto }}</td>
+                    <td class="align-middle">{{ tarea.fecha }}</td>
+                    <td class="align-middle">{{ tarea.titulo }}</td>
+                    <td class="align-middle">{{ tarea.descripcion }}</td>
+                    <td class="align-middle">
+                      <span 
+                        class="badge"
+                        :class="getClaseEstado(tarea.estado)"
+                      >
+                        {{ tarea.estado }}
+                      </span>
+                    </td>
+                    <td class="align-middle">{{ tarea.prioridad }}</td>
+                    <td class="align-middle">{{ getNombreEmpleado(tarea.empleadoId) }}</td>
                     <td class="text-center align-middle">
                       <div class="d-flex justify-content-center gap-2">
                         <button
@@ -189,6 +244,27 @@
     const arrayTareas = ref([
       {
         id: 1,
+        fecha: '2024-06-01',
+        titulo: 'Revisión de contratos',
+        descripcion: 'Revisar los contratos de los proveedores para el próximo trimestre.',
+        estado: 'pendiente',
+        prioridad: 'alta',
+        empleadoId: 1
+      },
+      {
+        id: 2,
+        fecha: '2024-06-05',
+        titulo: 'Actualización de software',
+        descripcion: 'Actualizar el software de gestión a la última versión.',
+        estado: 'en_proceso',
+        prioridad: 'media',
+        empleadoId: 2
+      }
+    ]);
+
+    const arrayEmpleados = ref([
+      {
+        id: 1,
         apellidos: 'García López',
         nombre: 'Juan',
         email: 'juan.garcia@empresa.com',
@@ -226,56 +302,17 @@
         email: 'pedro.gonzalez@empresa.com',
         movil: '656789012',
         puesto: 'RRHH'
-      },
-      {
-        id: 6,
-        apellidos: 'Moreno Jiménez',
-        nombre: 'Laura',
-        email: 'laura.moreno@empresa.com',
-        movil: '667890123',
-        puesto: 'Contabilidad'
-      },
-      {
-        id: 7,
-        apellidos: 'Ruiz Gómez',
-        nombre: 'Miguel',
-        email: 'miguel.ruiz@empresa.com',
-        movil: '678901234',
-        puesto: 'Almacén'
-      },
-      {
-        id: 8,
-        apellidos: 'Castillo Vargas',
-        nombre: 'Isabel',
-        email: 'isabel.castillo@empresa.com',
-        movil: '689012345',
-        puesto: 'Ventas'
-      },
-      {
-        id: 9,
-        apellidos: 'Navarro Romero',
-        nombre: 'Diego',
-        email: 'diego.navarro@empresa.com',
-        movil: '690123456',
-        puesto: 'RRHH'
-      },
-      {
-        id: 10,
-        apellidos: 'Soto Vega',
-        nombre: 'Patricia',
-        email: 'patricia.soto@empresa.com',
-        movil: '601234567',
-        puesto: 'Contabilidad'
       }
     ]);
 
     const nuevaTarea = ref({
-      id: '',
-      apellidos: '',
-      nombre: '',
-      email: '',
-      movil: '',
-      puesto: ''
+      id: 1,
+      fecha: '',
+      titulo: '',
+      descripcion: '',
+      estado: '',
+      prioridad: '', // baja | media | alta (radiobutton)
+      empleadoId: 0  // id del empleado seleccionado en amarillo
     });
 
     const editando = ref(false);
@@ -320,6 +357,25 @@
       arrayTareas.value = arrayTareas.value.filter((e) => e.id !== id);
     }
 
+    // Obtener nombre del empleado para mostrar en la tabla
+    const getNombreEmpleado = (empleadoId) => {
+      const empleado = arrayEmpleados.value.find((e) => e.id === empleadoId);
+      return empleado ? `${empleado.apellidos} ${empleado.nombre}` : 'N/A';
+    }
+
+    const getClaseEstado = (estado) => {
+      switch(estado) {
+        case 'pendiente':
+          return 'bg-danger text-white';
+        case 'en_proceso':
+          return 'bg-warning text-dark';
+        case 'finalizada':
+          return 'bg-success text-white';
+        default:
+          return 'bg-secondary text-white';
+      }
+    }
+
   // =============== Funciones Auxiliares ===============
 
     // Capitalización del Texto
@@ -339,11 +395,12 @@
     function recargarForm() {
       nuevaTarea.value = {
         id: '',
-        apellidos: '',
-        nombre: '',
-        email: '',
-        movil: '',
-        puesto: ''
+        fecha: '',
+        titulo: '',
+        descripcion: '',
+        estado: '',
+        prioridad: '',
+        empleadoId: 0
       };
       editando.value = false;
     }
