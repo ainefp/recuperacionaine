@@ -141,12 +141,12 @@
                 </thead>
                 <tbody>
                   <tr v-for="empleado in getEmpleado()" :key="empleado.id">
-                    <td>{{ empleado.apellidos }}</td>
-                    <td>{{ empleado.nombre }}</td>
-                    <td>{{ empleado.email }}</td>
-                    <td>{{ empleado.movil }}</td>
-                    <td>{{ empleado.puesto }}</td>
-                    <td class="text-center">
+                    <td class="align-middle">{{ empleado.apellidos }}</td>
+                    <td class="align-middle">{{ empleado.nombre }}</td>
+                    <td class="align-middle">{{ empleado.email }}</td>
+                    <td class="align-middle">{{ empleado.movil }}</td>
+                    <td class="align-middle">{{ empleado.puesto }}</td>
+                    <td class="text-center align-middle">
                       <div class="d-flex justify-content-center gap-2">
                         <button
                           @click="selEmpleado(empleado.id)"
@@ -355,150 +355,22 @@
 </script>
 
 <style scoped>
-/* =============== Contenedor Principal =============== */
-.container-fluid {
-  background-color: #f8f9fa;
-  min-height: 100vh;
-}
-
-/* =============== Typography =============== */
-h1 {
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
-  letter-spacing: -0.5px;
-}
-
-.form-label {
-  font-size: 0.95rem;
-  color: #495057;
-  margin-bottom: 0.5rem;
-}
-
-/* =============== Cards =============== */
-.card {
-  border-radius: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-}
-
-.card-header {
-  border-radius: 0.5rem 0.5rem 0 0;
-  padding: 1rem;
-  font-weight: 600;
-}
-
-.card-body {
-  padding: 1.5rem;
-}
-
-/* =============== Formulario =============== */
-.form-control,
-.form-select {
-  border: 1px solid #dee2e6;
-  border-radius: 0.375rem;
-  padding: 0.625rem 0.875rem;
-  font-size: 0.95rem;
-  transition: border-color 0.2s ease;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-}
-
-.form-control-plaintext {
-  padding: 0.625rem 0;
-  font-weight: 600;
-  color: #495057;
-  border: none;
-  background-color: transparent;
-}
-
-/* =============== Botones =============== */
-.btn {
-  border-radius: 0.375rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: none;
-}
-
-.btn-primary {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-}
-
-.btn-primary:hover {
-  background-color: #0b5ed7;
-  border-color: #0b5ed7;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
-}
-
-.btn-outline-secondary {
-  color: #6c757d;
-  border-color: #6c757d;
-}
-
-.btn-outline-secondary:hover {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  color: #fff;
-}
-
-.btn-sm {
-  padding: 0.35rem 0.65rem;
-  font-size: 0.85rem;
-}
-
 /* =============== Tabla =============== */
 .table {
   font-size: 0.95rem;
-  margin-bottom: 0;
 }
 
 .table thead th {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
   padding: 0.75rem;
-  color: #495057;
-  font-size: 0.85rem;
-}
-
-.table tbody tr {
-  border-bottom: 1px solid #dee2e6;
-}
-
-.table tbody tr:hover {
-  background-color: #f8f9fa;
 }
 
 .table tbody td {
   padding: 0.75rem;
-  vertical-align: middle;
-  color: #212529;
 }
 
 .table-responsive {
   max-height: 600px;
   overflow-y: auto;
-}
-
-/* =============== Badge =============== */
-.badge {
-  padding: 0.375rem 0.625rem;
-  font-size: 0.85rem;
-  font-weight: 500;
 }
 
 /* =============== Responsive Design =============== */
@@ -707,22 +579,5 @@ h1 {
   .text-center p {
     font-size: 0.85rem;
   }
-}
-
-/* =============== Utilidades =============== */
-.hr {
-  margin: 0.5rem 0 1rem 0;
-}
-
-.border-primary {
-  border-color: #0d6efd !important;
-}
-
-.border-2 {
-  border-width: 2px !important;
-}
-
-.text-muted {
-  color: #6c757d !important;
 }
 </style>
