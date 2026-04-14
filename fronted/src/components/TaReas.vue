@@ -128,18 +128,24 @@
 
               <!-- Empleado -->
               <div class="col-12">
-                <label class="form-label">Empleado:</label>
+                <label for="empleadoId" class="form-label">Empleado (ID):</label>
                 <div class="input-group">
                   <input 
-                    type="text" 
-                    class="form-control" 
-                    placeholder="Seleccione un empleado"
-                    :value="getNombreEmpleado(nuevaTarea.empleadoId) || ''"
-                    disabled
+                    id="empleadoId"
+                    type="number" 
+                    v-model.number="nuevaTarea.empleadoId" 
+                    :class="{
+                      'form-control': true,
+                      'bg-warning': empleadoValidado === 'encontrado',
+                      'bg-danger text-white': empleadoValidado === 'no_encontrado'
+                    }"
+                    min="1"
+                    placeholder="Ingrese ID del empleado"
                   />
                   <button 
                     type="button" 
                     class="btn btn-outline-primary"
+                    @click="buscarEmpleado"
                   >
                     <i class="bi bi-search"></i> Buscar
                   </button>
@@ -238,6 +244,7 @@
 
 <script setup>
   import { ref, onMounted, computed } from 'vue';
+  import Swal from 'sweetalert2';
 
   // =============== Declaración de variables ===============
   
@@ -316,6 +323,7 @@
     });
 
     const editando = ref(false);
+    const empleadoValidado = ref(''); // '' | 'encontrado' | 'no_encontrado'
 
     onMounted(async () => {
       recargarForm();
@@ -403,13 +411,282 @@
         empleadoId: 0
       };
       editando.value = false;
+      empleadoValidado.value = '';
     }
 
     const ultimoID = () => {
       return arrayTareas.value.length
     }
 
+    // Buscar empleado y validar
+    const buscarEmpleado = async () => {
+      if (nuevaTarea.value.empleadoId === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Por favor',
+          text: 'Seleccione un empleado antes de buscar',
+          confirmButtonColor: '#0d6efd'
+        });
+        empleadoValidado.value = '';
+        return;
+      }
+
+      const empleado = arrayEmpleados.value.find(e => e.id === nuevaTarea.value.empleadoId);
+      
+      if (empleado) {
+        empleadoValidado.value = 'encontrado';
+        Swal.fire({
+          icon: 'success',
+          title: '¡Empleado encontrado!',
+          html: `
+            <div style="text-align: left;">
+              <p><strong>Nombre:</strong> ${empleado.nombre}</p>
+              <p><strong>Apellidos:</strong> ${empleado.apellidos}</p>
+              <p><strong>Email:</strong> ${empleado.email}</p>
+              <p><strong>Móvil:</strong> ${empleado.movil}</p>
+              <p><strong>Puesto:</strong> ${empleado.puesto}</p>
+            </div>
+          `,
+          confirmButtonColor: '#0d6efd'
+        });
+      } else {
+        empleadoValidado.value = 'no_encontrado';
+        nuevaTarea.value.empleadoId = 0;
+        Swal.fire({
+          icon: 'error',
+          title: 'Empleado no encontrado',
+          text: 'No se encontró el empleado seleccionado en el sistema',
+          confirmButtonColor: '#0d6efd'
+        });
+      }
+    }
+
 </script>
 
 <style scoped>
+/* =============== Tabla =============== */
+.table {
+  font-size: 0.95rem;
+}
+
+.table thead th {
+  padding: 0.75rem;
+}
+
+.table tbody td {
+  padding: 0.75rem;
+}
+
+.table-responsive {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* =============== Responsive Design =============== */
+@media (max-width: 1199px) {
+  .card-header {
+    padding: 0.875rem;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 991px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  .row.g-4 {
+    gap: 2rem !important;
+  }
+
+  .table-responsive {
+    max-height: 500px;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .table thead th {
+    padding: 0.65rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .table tbody td {
+    padding: 0.65rem 0.5rem;
+  }
+
+  .btn-sm {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 0.9rem;
+    padding: 0.55rem 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .px-md-4 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .card-header {
+    padding: 0.75rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .table-responsive {
+    max-height: 400px;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table thead th {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .table tbody td {
+    padding: 0.5rem 0.4rem;
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .me-2 {
+    margin-right: 0.25rem !important;
+  }
+
+  .form-label {
+    font-size: 0.85rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.65rem;
+  }
+
+  .row.g-3 {
+    gap: 1rem !important;
+  }
+
+  .d-flex.gap-2 {
+    gap: 0.5rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .py-4 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .g-4 {
+    gap: 1.5rem !important;
+  }
+
+  .card {
+    border-radius: 0.375rem;
+  }
+
+  .card-header {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+
+  .card-body {
+    padding: 0.875rem;
+  }
+
+  .table {
+    font-size: 0.8rem;
+  }
+
+  .table thead th {
+    padding: 0.4rem 0.3rem;
+    font-size: 0.7rem;
+  }
+
+  .table tbody td {
+    padding: 0.4rem 0.3rem;
+  }
+
+  .btn {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .btn-sm {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .form-label {
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.6rem;
+  }
+
+  .badge {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .row.g-3 {
+    gap: 0.75rem !important;
+  }
+
+  .d-flex.gap-2 {
+    gap: 0.35rem !important;
+  }
+
+  .flex-grow-1 {
+    flex-grow: 1 !important;
+  }
+
+  .text-center {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .text-center p {
+    font-size: 0.85rem;
+  }
+}
 </style>
